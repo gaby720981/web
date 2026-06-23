@@ -1,0 +1,34 @@
+{
+    "socios": [
+        {
+            "nombre": "Gaby",
+            "edad": 30,
+            "email": "gaby@email.com"
+        },
+        {
+            "nombre": "Carlos",
+            "edad": 25,
+            "email": "carlos@email.com"
+        },
+        {
+            "nombre": "Ana",
+            "edad": 28,
+            "email": "ana@email.com"
+        }
+    ],
+    "actividades": [
+        {
+            "nombre": "Musculación",
+            "horario": "18:00"
+        },
+        {
+            "nombre": "Spinning",
+            "horario": "19:00"
+        },
+        {
+            "nombre": "Yoga",
+            "horario": "20:00"
+        }
+    ],
+    "turnos": []
+}

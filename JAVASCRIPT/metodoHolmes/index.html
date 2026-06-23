@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>El Método Holmes</title>
+    <style>
+        /* --- RESET Y ESTILOS BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #353533;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 680px;
+            width: 100%;
+            text-align: center;
+            padding: 40px 30px;
+            background: #070000;
+        }
+
+        .container h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            color: #ded8d8;
+        }
+
+        .container h1 span {
+            display: inline-block;
+            font-size: 1.6rem;
+        }
+
+        .container .subtitle {
+            font-size: 0.8rem;
+            color: #d3cece;
+            margin-bottom: 28px;
+            border-top: 1px solid #dddddd;
+            border-bottom: 1px solid #dddddd;
+            padding: 10px 0;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+
+        .container .subtitle .autor {
+            display: block;
+            margin-top: 4px;
+            font-style: normal;
+            font-size: 0.7rem;
+            color: #d3d3d3;
+        }
+
+        /* --- BOTÓN --- */
+        .btn-holmes {
+            display: inline-block;
+            padding: 16px 24px;
+            background: #2f1375;
+            color: #f8f6f2;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin-bottom: 28px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+
+        .btn-holmes:hover {
+            background: #433de8;
+            color: #ffffff;
+            box-shadow: 2px 2px 0 #ffffff;
+            transform: translate(2px, 2px);
+        }
+
+        .btn-holmes:active {
+            transform: scale(0.96);
+            box-shadow: none;
+        }
+
+        /* --- CAJA DEL CONSEJO --- */
+        .truth-box {
+            min-height: 180px;
+            padding: 28px 22px;
+            background: #010100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, border-color 0.2s;
+        }
+
+        .truth-box .consejo {
+            font-size: 1.17rem;
+            line-height: 1.7;
+            color: #ffffff;
+            margin: 0;
+            font-weight: 700;
+            word-break: break-word;
+            min-height: 60px;
+        }
+
+        .truth-box .explicacion {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #000000;
+            margin-top: 12px;
+            font-style: italic;
+            padding-top: 12px;
+            width: 100%;
+        }
+
+        .truth-box .accion {
+            font-size: 0.85rem;
+            color: #c8c2c2;
+            margin-top: 10px;
+            padding-top: 10px;
+            width: 100%;
+            font-weight: 400;
+        }
+
+        .truth-box .accion strong {
+            color: #dbd1d1;
+            font-weight: 700;
+        }
+
+        .truth-box .placeholder {
+            color: #aaaaaa;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .truth-box.writing {
+            border-color: #ccc9c9;
+            background: #000000;
+        }
+
+        /* Cursor parpadeante */
+        .cursor-blink {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: #1a1a1a;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink 0.6s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* --- CONTADOR --- */
+        .counter {
+            margin-top: 18px;
+            font-size: 0.75rem;
+            color: #888888;
+            letter-spacing: 0.5px;
+            border-top: 1px solid #eeeeee;
+            padding-top: 16px;
+            transition: color 0.3s;
+        }
+
+        .counter strong {
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .counter.high {
+            color: #333333;
+        }
+
+        .counter.high strong {
+            color: #b34747;
+        }
+
+        /* --- BOTÓN REINICIAR --- */
+        .btn-reset {
+            margin-top: 12px;
+            background: none;
+            border: none;
+            border-bottom: 1px dashed #cccccc;
+            color: #999999;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: color 0.2s;
+        }
+
+        .btn-reset:hover {
+            color: #1a1a1a;
+            border-bottom-color: #1a1a1a;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 16px;
+            }
+            .container h1 {
+                font-size: 1.5rem;
+            }
+            .btn-holmes {
+                font-size: 0.8rem;
+                padding: 14px 16px;
+            }
+            .truth-box .consejo {
+                font-size: 1rem;
+            }
+            .truth-box .explicacion {
+                font-size: 0.85rem;
+            }
+            .truth-box .accion {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>🕵️ el método holmes</h1>
+        <div class="subtitle">
+            «entrena tu mente para observar, deducir y decidir mejor»
+            <span class="autor">— basado en el libro de Maria Konnikova</span>
+        </div>
+
+        <button class="btn-holmes" id="btnRevelar">
+            recibir un consejo
+        </button>
+
+        <!-- CAJA DEL CONSEJO -->
+        <div class="truth-box" id="truthBox">
+            <p class="placeholder">haz clic y empieza a entrenar tu mente...</p>
+        </div>
+
+        <div class="counter" id="counterDisplay">
+            consejos aplicados: <strong id="countNumber">0</strong>
+        </div>
+
+        <button class="btn-reset" id="btnReset">↺ reiniciar entrenamiento</button>
+
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // --- LISTA DE CONSEJOS ---
+            const consejos = [
+                // Observación
+                {
+                    consejo: "Observa los detalles que otros pasan por alto.",
+                    explicacion: "La diferencia entre ver y observar es el foco de atención. Ver es pasivo; observar es activo y requiere intención.",
+                    accion: "Hoy, al entrar a una habitación, intenta recordar 5 detalles que normalmente no notarías."
+                },
+                {
+                    consejo: "Entrena tu mente para estar presente.",
+                    explicacion: "La atención plena es el primer paso para pensar como Holmes. Sin presencia, no hay observación.",
+                    accion: "Durante 2 minutos, cierra los ojos y concéntrate solo en los sonidos que te rodean."
+                },
+                {
+                    consejo: "No confundas ver con mirar.",
+                    explicacion: "Ver es pasivo, mirar es activo. Mirar implica preguntarse '¿qué es esto?', '¿por qué está aquí?', '¿qué significa?'.",
+                    accion: "Mira un objeto cotidiano (una taza, un libro) y pregúntate: ¿de qué está hecho? ¿cómo se hizo? ¿qué historia tiene?"
+                },
+                {
+                    consejo: "Pregúntate: ¿qué es lo que no estoy viendo?",
+                    explicacion: "A menudo, lo más importante está oculto a simple vista. El entrenamiento consiste en buscar lo que falta.",
+                    accion: "Mira una fotografía y escribe 5 cosas que no aparecen en ella pero que podrían estar fuera de campo."
+                },
+                {
+                    consejo: "La observación comienza cuando dejas de hablar y empiezas a escuchar.",
+                    explicacion: "El silencio es tu aliado. Escuchar activamente te da información que las palabras no pueden transmitir.",
+                    accion: "En tu próxima conversación, escucha sin interrumpir y sin planear tu respuesta. Solo escucha."
+                },
+
+                // Memoria y ático mental
+                {
+                    consejo: "Tu mente es un ático. No llenes cada rincón.",
+                    explicacion: "Guarda solo lo que sea útil para tus objetivos. La información irrelevante satura y confunde.",
+                    accion: "Hoy, cuando aprendas algo nuevo, pregúntate: ¿realmente necesito saber esto?"
+                },
+                {
+                    consejo: "La memoria no es un archivo estático, es un proceso activo.",
+                    explicacion: "Repite, relaciona y repasa la información. La memoria se fortalece con el uso.",
+                    accion: "Al final del día, repasa mentalmente 3 cosas que aprendiste y conéctalas con algo que ya sabías."
+                },
+                {
+                    consejo: "No almacenes datos, almacena conexiones.",
+                    explicacion: "La información aislada es inútil; la información relacionada es poderosa. El conocimiento es una red.",
+                    accion: "Elige un concepto y escríbelo en el centro de un papel. Dibuja líneas a otros conceptos relacionados."
+                },
+                {
+                    consejo: "El conocimiento no es poder, el conocimiento aplicado es poder.",
+                    explicacion: "No basta con saber; hay que hacer. El verdadero poder está en la acción informada.",
+                    accion: "Aplica un consejo de este sitio hoy mismo, en una situación real."
+                },
+
+                // Razonamiento y lógica
+                {
+                    consejo: "No saques conclusiones precipitadas.",
+                    explicacion: "Reúne todas las pistas antes de formar una teoría. El cerebro es perezoso y tiende a lo primero.",
+                    accion: "Antes de responder una pregunta, cuenta hasta 5 mentalmente. Date tiempo para pensar."
+                },
+                {
+                    consejo: "La mejor explicación no siempre es la más obvia.",
+                    explicacion: "Busca la hipótesis que explique *todas* las pistas, no solo las que confirman tu sesgo.",
+                    accion: "Plantea 3 explicaciones alternativas para un problema cotidiano y elige la más sólida."
+                },
+                {
+                    consejo: "Desconfía de tus primeras impresiones.",
+                    explicacion: "El cerebro humano tiende a la primera solución. La mente de Holmes se detiene a cuestionar.",
+                    accion: "Hoy, antes de juzgar a alguien o algo, pregúntate: ¿qué evidencia tengo?"
+                },
+                {
+                    consejo: "Piensa como un científico.",
+                    explicacion: "Formula hipótesis, ponlas a prueba y descarta las que no funcionen. La ciencia es un método, no un dogma.",
+                    accion: "Identifica una creencia tuya y pregúntate: ¿qué evidencia la refutaría? Si no encuentras ninguna, quizá es dogma."
+                },
+                {
+                    consejo: "La lógica es una herramienta, no un destino.",
+                    explicacion: "Úsala para explorar, no para cerrar puertas. La lógica te guía, pero no te encierra.",
+                    accion: "Hoy, al tomar una decisión, escribe los pros y contras, pero luego escucha tu intuición."
+                },
+
+                // Toma de decisiones
+                {
+                    consejo: "Las decisiones apresuradas son decisiones erróneas.",
+                    explicacion: "Tómate el tiempo que necesites. La urgencia es enemiga del buen juicio.",
+                    accion: "Antes de tomar una decisión importante, espera una noche. Si la decisión es buena, sobrevivirá la espera."
+                },
+                {
+                    consejo: "Separa la emoción de la razón.",
+                    explicacion: "La emoción es información valiosa, pero no debe ser el único criterio para decidir.",
+                    accion: "Cuando sientas una emoción fuerte, pregúntate: ¿qué me está diciendo esta emoción? ¿y qué me dice la razón?"
+                },
+                {
+                    consejo: "Antes de decidir, pregúntate: ¿qué pasaría si estuviera equivocado?",
+                    explicacion: "Imaginar el error te permite anticipar riesgos y preparar alternativas.",
+                    accion: "Hoy, elige una decisión y escribe un plan B por si falla."
+                },
+                {
+                    consejo: "La mejor decisión es la que puedes justificar con evidencia, no con intuición.",
+                    explicacion: "La intuición es útil, pero la evidencia es el pilar de una buena decisión.",
+                    accion: "Hoy, antes de responder una pregunta importante, busca 3 datos que apoyen tu respuesta."
+                },
+                {
+                    consejo: "La indecisión también es una decisión.",
+                    explicacion: "Elegir no elegir es una elección que también tiene consecuencias. Asúmelas.",
+                    accion: "Si llevas más de una semana indeciso, toma una decisión aunque no sea perfecta. La acción es mejor que la parálisis."
+                },
+
+                // Práctica y hábito
+                {
+                    consejo: "Pensar como Holmes no es un talento, es un hábito.",
+                    explicacion: "Se entrena como un músculo. La constancia es más importante que la intensidad.",
+                    accion: "Hoy, dedica 5 minutos a observar tu entorno como si fuera la primera vez."
+                },
+                {
+                    consejo: "El error es parte del proceso.",
+                    explicacion: "No lo evites, analízalo y aprende de él. El fracaso es una oportunidad de mejora.",
+                    accion: "Hoy, escribe un error que cometiste y pregúntate: ¿qué aprendí? ¿qué haré diferente la próxima vez?"
+                },
+                {
+                    consejo: "La curiosidad es el motor del pensamiento.",
+                    explicacion: "Pregunta siempre: ¿por qué? ¿cómo? ¿qué pasaría si...? La curiosidad es el antídoto contra la rigidez.",
+                    accion: "Hoy, elige un tema que te interese y dedica 10 minutos a investigarlo. Sigue una pregunta que te surja."
+                },
+                {
+                    consejo: "El pensamiento crítico no es natural, es aprendido.",
+                    explicacion: "Nacemos con curiosidad, pero el pensamiento crítico se construye con práctica. No es innato, se entrena.",
+                    accion: "Hoy, al leer una noticia, identifica: ¿quién la escribe? ¿qué interés tiene? ¿qué evidencia muestra?"
+                }
+            ];
+
+            // --- ELEMENTOS DEL DOM ---
+            const btn = document.getElementById('btnRevelar');
+            const btnReset = document.getElementById('btnReset');
+            const truthBox = document.getElementById('truthBox');
+            const countSpan = document.getElementById('countNumber');
+            const counterDiv = document.getElementById('counterDisplay');
+
+            let contador = 0;
+            let escribiendo = false;
+            let timeoutActual = null;
+
+            // --- OBTENER CONSEJO ALEATORIO ---
+            function getConsejoAleatorio() {
+                return consejos[Math.floor(Math.random() * consejos.length)];
+            }
+
+            // --- EFECTO MÁQUINA DE ESCRIBIR ---
+            function escribirConsejo(data) {
+                if (escribiendo) return;
+                if (timeoutActual) {
+                    clearTimeout(timeoutActual);
+                    timeoutActual = null;
+                }
+
+                escribiendo = true;
+                truthBox.innerHTML = '';
+                truthBox.classList.add('writing');
+
+                // 1. Consejo principal
+                const consejoP = document.createElement('p');
+                consejoP.className = 'consejo';
+                truthBox.appendChild(consejoP);
+
+                // 2. Explicación
+                const explicacionDiv = document.createElement('div');
+                explicacionDiv.className = 'explicacion';
+                truthBox.appendChild(explicacionDiv);
+
+                // 3. Acción
+                const accionDiv = document.createElement('div');
+                accionDiv.className = 'accion';
+                truthBox.appendChild(accionDiv);
+
+                // --- Escritura secuencial ---
+                const textoCompleto = data.consejo;
+                const explicacionTexto = data.explicacion;
+                const accionTexto = data.accion;
+
+                let indice = 0;
+                const velocidad = 45;
+
+                function typeLetter() {
+                    if (indice < textoCompleto.length) {
+                        consejoP.textContent += textoCompleto.charAt(indice);
+                        indice++;
+                        timeoutActual = setTimeout(typeLetter, velocidad);
+                    } else {
+                        // Añadir cursor al final del consejo
+                        const cursor = document.createElement('span');
+                        cursor.className = 'cursor-blink';
+                        consejoP.appendChild(cursor);
+
+                        // Mostrar explicación completa
+                        explicacionDiv.textContent = '— ' + explicacionTexto;
+
+                        // Mostrar acción completa
+                        accionDiv.innerHTML = '<strong>🎯 acción:</strong> ' + accionTexto;
+
+                        truthBox.classList.remove('writing');
+                        escribiendo = false;
+                        timeoutActual = null;
+                    }
+                }
+
+                typeLetter();
+            }
+
+            // --- MOSTRAR CONSEJO ---
+            function mostrarConsejo() {
+                if (escribiendo) return;
+
+                contador++;
+                countSpan.textContent = contador;
+
+                // Cambiar texto del botón
+                if (contador === 1) {
+                    btn.textContent = 'otro consejo';
+                } else if (contador === 5) {
+                    btn.textContent = '¿sigues entrenando?';
+                } else if (contador === 10) {
+                    btn.textContent = 'eres un buen detective';
+                } else if (contador === 15) {
+                    btn.textContent = 'Holmes estaría orgulloso';
+                }
+
+                if (contador > 5) {
+                    counterDiv.classList.add('high');
+                }
+
+                const data = getConsejoAleatorio();
+                escribirConsejo(data);
+            }
+
+            // --- REINICIAR ---
+            function reiniciar() {
+                if (escribiendo) return;
+
+                if (timeoutActual) {
+                    clearTimeout(timeoutActual);
+                    timeoutActual = null;
+                }
+                escribiendo = false;
+
+                contador = 0;
+                countSpan.textContent = '0';
+                counterDiv.classList.remove('high');
+                btn.textContent = 'recibir un consejo';
+
+                truthBox.innerHTML = '';
+                truthBox.classList.remove('writing');
+                const placeholder = document.createElement('p');
+                placeholder.className = 'placeholder';
+                placeholder.textContent = 'haz clic y empieza a entrenar tu mente...';
+                truthBox.appendChild(placeholder);
+            }
+
+            // --- EVENTOS ---
+            btn.addEventListener('click', mostrarConsejo);
+            btnReset.addEventListener('click', reiniciar);
+
+        })();
+    </script>
+
+</body>
+</html>

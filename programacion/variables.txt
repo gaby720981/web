@@ -1,0 +1,35 @@
+let userName = "Gaby";       // nombre del usuario
+let cartTotal = 1500.75;     // total del carrito
+let isLoggedIn = true;       // estado de sesión
+let itemsInCart = 3;         // cantidad de productos
+
+
+// 1. Tasa de IVA o impuesto
+const TAX_RATE = 0.21;
+
+// 2. Número máximo de intentos de login
+const MAX_LOGIN_ATTEMPTS = 3;
+
+// 3. URL base de una API
+const API_BASE_URL = "https://api.miapp.com/v1";
+
+// 4. Versión actual de la aplicación
+const APP_VERSION = "1.0.0";
+
+// 5. Moneda por defecto
+const CURRENCY = "USD";
+
+// 6. Límite máximo de caracteres en un post
+const MAX_POST_LENGTH = 280;
+
+// 7. Dirección de correo de soporte
+const SUPPORT_EMAIL = "soporte@miapp.com";
+
+// 8. Objetivo diario de pasos en una app de fitness
+const DAILY_STEP_GOAL = 10000;
+
+// 9. Cantidad mínima para envío gratis en un e-commerce
+const FREE_SHIPPING_THRESHOLD = 50;
+
+// 10. Unidad de temperatura por defecto en una app de clima
+const TEMPERATURE_UNIT = "Celsius";

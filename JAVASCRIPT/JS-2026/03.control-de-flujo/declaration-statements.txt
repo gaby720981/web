@@ -1,0 +1,22 @@
+DECLARATION: lo que va a ser utilizado en un futuro
+
+LET
+CONST
+FUNCTION
+ASYNC FUNCTION
+CLASS
+EXPORT/IMPORT
+
+STATEMENTS:
+
+IT 
+FOR
+ELSE
+SWITCH
+
+EXPRESSION: cualquier linea de codigo que evalue en un valor
+
+4 + 6 -> 10
+x = 4
+miFuncion()
+

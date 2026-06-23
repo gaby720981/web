@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Estaturas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #4a86e8;
+            outline: none;
+        }
+        button {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        #resultados {
+            margin-top: 30px;
+            text-align: left;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+        }
+        #resultados h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+            border-bottom: 2px solid #4a86e8;
+            padding-bottom: 8px;
+        }
+        .estatura-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .estatura-item:last-child {
+            border-bottom: none;
+        }
+        .error {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        .step.active {
+            background-color: #4a86e8;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registro de Estaturas</h1>
+        
+        <div class="step-indicator">
+            <div class="step active">1</div>
+            <div class="step">2</div>
+            <div class="step">3</div>
+            <div class="step">4</div>
+            <div class="step">5</div>
+        </div>
+        
+        <div class="input-group">
+            <label for="estatura-input">Ingrese estatura (en metros):</label>
+            <input type="number" id="estatura-input" step="0.01" min="0.5" max="2.5" placeholder="Ej. 1.75">
+            <div class="error" id="error-msg">Por favor, ingrese una estatura válida (entre 0.5 y 2.5 metros)</div>
+        </div>
+        
+        <button id="agregar-btn">Agregar Estatura</button>
+        <button id="mostrar-btn" disabled>Mostrar Estaturas</button>
+        
+        <div id="resultados">
+            <h2>Estaturas Ingresadas</h2>
+            <div id="estaturas-lista"></div>
+        </div>
+    </div>
+
+    <script>
+        // Declaración del array para almacenar las estaturas (como en el pseudocódigo)
+        const estaturas = [];
+        let indiceActual = 0;
+        
+        // Elementos de la interfaz
+        const estaturaInput = document.getElementById('estatura-input');
+        const agregarBtn = document.getElementById('agregar-btn');
+        const mostrarBtn = document.getElementById('mostrar-btn');
+        const resultadosDiv = document.getElementById('resultados');
+        const estaturasLista = document.getElementById('estaturas-lista');
+        const errorMsg = document.getElementById('error-msg');
+        const steps = document.querySelectorAll('.step');
+        
+        // Función para agregar una estatura al array
+        agregarBtn.addEventListener('click', () => {
+            const estatura = parseFloat(estaturaInput.value);
+            
+            // Validación de la entrada
+            if (isNaN(estatura) || estatura < 0.5 || estatura > 2.5) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+            
+            errorMsg.style.display = 'none';
+            
+            // Almacenar la estatura en el array (equivalente a Leer(estaturas[i]) en pseudocódigo)
+            estaturas[indiceActual] = estatura;
+            
+            // Actualizar el indicador de paso
+            steps[indiceActual].classList.add('active');
+            
+            // Preparar para el siguiente valor
+            indiceActual++;
+            estaturaInput.value = '';
+            
+            // Actualizar el placeholder con el siguiente índice
+            estaturaInput.placeholder = `Estatura #${indiceActual + 1} (ej. 1.75)`;
+            
+            // Si ya se ingresaron 5 estaturas, deshabilitar el botón de agregar
+            if (indiceActual >= 5) {
+                agregarBtn.disabled = true;
+                estaturaInput.disabled = true;
+                mostrarBtn.disabled = false;
+                agregarBtn.textContent = 'Completado (5/5)';
+            } else {
+                // Actualizar el texto del botón
+                agregarBtn.textContent = `Agregar (${indiceActual}/5)`;
+            }
+        });
+        
+        // Función para mostrar las estaturas (equivalente al procedimiento MostrarEst)
+        mostrarBtn.addEventListener('click', () => {
+            // Limpiar lista previa
+            estaturasLista.innerHTML = '';
+            
+            // Recorrer el array y mostrar cada estatura (equivalente al bucle Para en el pseudocódigo)
+            for (let i = 0; i < estaturas.length; i++) {
+                const item = document.createElement('div');
+                item.className = 'estatura-item';
+                item.innerHTML = `<span>Estatura #${i + 1}:</span> <span>${estaturas[i].toFixed(2)} metros</span>`;
+                estaturasLista.appendChild(item);
+            }
+            
+            // Mostrar el div de resultados
+            resultadosDiv.style.display = 'block';
+            
+            // Desplazarse suavemente hacia los resultados
+            resultadosDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Habilitar el botón de agregar cuando se ingrese un valor válido
+        estaturaInput.addEventListener('input', () => {
+            const estatura = parseFloat(estaturaInput.value);
+            if (!isNaN(estatura) && estatura >= 0.5 && estatura <= 2.5) {
+                errorMsg.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

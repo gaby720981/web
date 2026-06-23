@@ -1,0 +1,27 @@
+Variables:
+  totalCompra ← 0
+  envioGratis ← 50
+  descuento ← 0
+  tipoEnvio ← ""
+  clienteVIP ← false
+
+Inicio:
+  totalCompra ← 120
+  clienteVIP ← true
+  
+  Si (clienteVIP = true) entonces:
+      descuento ← totalCompra * 0.10
+  Sino:
+      descuento ← 0
+  FinSi
+  
+  Si (totalCompra >= envioGratis) entonces:
+      tipoEnvio ← "Gratis"
+  Sino:
+      tipoEnvio ← "Pagado"
+  FinSi
+  
+  Escribir("Total de la compra: ", totalCompra)
+  Escribir("Descuento aplicado: ", descuento)
+  Escribir("Tipo de envío: ", tipoEnvio)
+Fin
